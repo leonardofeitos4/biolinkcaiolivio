@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Caio Livio | Artista Plástico · Galeria Oficial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+<canvas id="nc"></canvas>
+
+<!-- ════════════════════════════════
+     HOME
+════════════════════════════════ -->
+<div class="pg" id="home">
+  <div class="home-wrap">
+
+    <div class="hdr">
+      <div class="avatar-shell">
+        <div class="avatar-ring"></div>
+        <div class="avatar-inner">
+          <img src="assets/images/caio-perfil.jpg" alt="Caio Livio">
+        </div>
+      </div>
+      <div class="cname">Caio Livio</div>
+      <div class="ctag">Artista Plástico · Recife, PE</div>
+      <div class="cbio">Pintura Abstrata Contemporânea<br>Galeria Oficial · Curadoria Online e Presencial</div>
+      <div class="badges">
+        <span class="badge">Pintura Abstrata</span>
+        <span class="badge">Arte Contemporânea</span>
+        <span class="badge">Acrílico sobre Tela</span>
+        <span class="badge">Curadoria Personalizada</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="sn" data-t="200">0</div><div class="sl">Obras Autorais</div></div>
+      <div class="ss"></div>
+      <div class="stat"><div class="sn" data-t="15">0</div><div class="sl">Anos de Trajetória</div></div>
+      <div class="ss"></div>
+      <div class="stat"><div class="sn" data-t="5">0</div><div class="sl">Séries Exclusivas</div></div>
+    </div>
+
+    <!-- Obra em Destaque -->
+    <div class="obra-feature" onclick="go('page-acervo')">
+      <div class="obra-feature-wall">
+        <div class="obra-feature-spot"></div>
+        <div class="obra-feature-matte">
+          <div class="obra-feature-art">
+            <img src="assets/images/obra-destaque.jpg" alt="Obra 001 — pintura abstrata de Caio Livio">
+          </div>
+        </div>
+      </div>
+      <div class="obra-feature-text">
+        <div class="obra-feature-tag">Obra em Destaque</div>
+        <div class="obra-feature-name">Obra 001</div>
+        <div class="obra-feature-meta">Medidas sob consulta · Óleo e acrílico</div>
+      </div>
+    </div>
+
+    <!-- Link cards -->
+    <div class="links">
+      <a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20gostaria%20de%20falar%20com%20o%20curador%20sobre%20as%20obras%20de%20Caio%20Livio." class="lcard" target="_blank" rel="noopener">
+        <div class="cico wa-ico"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="fill:#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+        <div class="ctxt"><div class="ct">Falar com o curador</div><div class="cs">WhatsApp · Atendimento sobre o acervo</div></div>
+        <div class="carr">→</div>
+      </a>
+      <div class="lcard" onclick="go('page-sobre')">
+        <div class="cico art-ico photo-ico"><img src="assets/images/caio-quemsou.jpg" alt="Caio Livio"></div>
+        <div class="ctxt"><div class="ct">Quem sou</div><div class="cs">Conheça a trajetória do artista</div></div>
+        <div class="carr">→</div>
+      </div>
+      <div class="lcard" onclick="go('page-acervo')">
+        <div class="cico art-ico">🖼️</div>
+        <div class="ctxt"><div class="ct">Acervo & Séries</div><div class="cs">Cinco séries exclusivas · Como adquirir</div></div>
+        <div class="carr">→</div>
+      </div>
+      <div class="lcard" onclick="go('page-clientes')">
+        <div class="cico art-ico">⭐</div>
+        <div class="ctxt"><div class="ct">Colecionadores</div><div class="cs">O que dizem sobre as obras de Caio</div></div>
+        <div class="carr">→</div>
+      </div>
+      <a href="https://www.instagram.com/caiolivioart" class="lcard" target="_blank" rel="noopener">
+        <div class="cico ig-ico"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ig-g" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/><stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><path fill="url(#ig-g)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+        <div class="ctxt"><div class="ct">Instagram</div><div class="cs">@caiolivioart</div></div>
+        <div class="carr">→</div>
+      </a>
+      <div class="lcard" onclick="go('page-chat')">
+        <div class="cico cora-ico">C</div>
+        <div class="ctxt"><div class="ct">Tire suas dúvidas com a Cora</div><div class="cs">Curadoria digital · Assistente online</div></div>
+        <div class="carr">→</div>
+      </div>
+      <a href="mailto:curadoria@caiolivio.art" class="lcard">
+        <div class="cico mail-ico">✉️</div>
+        <div class="ctxt"><div class="ct">E-mail</div><div class="cs">curadoria@caiolivio.art</div></div>
+        <div class="carr">→</div>
+      </a>
+    </div>
+
+    <!-- Séries & Inspiração -->
+    <div class="dv"><div class="dl"></div><div class="dt">Séries & Inspiração</div><div class="dl"></div></div>
+    <div class="motiv-wrap">
+      <div class="motiv-scroll">
+        <div class="mcard" onclick="go('page-acervo')">
+          <div class="mcard-media" style="background:var(--serie-essencia)">
+            <div class="mcard-overlay">
+              <div class="mq-icon">🔥</div>
+              <div class="mq-text">"Camadas de memória e afeto."</div>
+              <div class="mq-tag">Essência</div>
+            </div>
+          </div>
+          <div class="mcard-foot"><div class="mcard-label">Exploração Emocional</div><div class="mcard-brand">Caio Livio</div></div>
+        </div>
+        <div class="mcard" onclick="go('page-acervo')">
+          <div class="mcard-media" style="background:var(--serie-movimento)">
+            <div class="mcard-overlay">
+              <div class="mq-icon">🌊</div>
+              <div class="mq-text">"Dinamismo e energia em tela."</div>
+              <div class="mq-tag">Movimento</div>
+            </div>
+          </div>
+          <div class="mcard-foot"><div class="mcard-label">Dinamismo</div><div class="mcard-brand">Caio Livio</div></div>
+        </div>
+        <div class="mcard" onclick="go('page-acervo')">
+          <div class="mcard-media" style="background:var(--serie-horizonte)">
+            <div class="mcard-overlay">
+              <div class="mq-icon">🌿</div>
+              <div class="mq-text">"Paisagens abstratas e amplas."</div>
+              <div class="mq-tag">Horizonte</div>
+            </div>
+          </div>
+          <div class="mcard-foot"><div class="mcard-label">Paisagens</div><div class="mcard-brand">Caio Livio</div></div>
+        </div>
+        <div class="mcard" onclick="go('page-sobre')">
+          <div class="mcard-media" style="background:var(--serie-conexoes)">
+            <div class="mcard-overlay">
+              <div class="mq-icon">👨🏻‍🎨</div>
+              <div class="mq-text">"15 anos de trajetória em Recife."</div>
+              <div class="mq-tag">Quem Sou</div>
+            </div>
+          </div>
+          <div class="mcard-foot"><div class="mcard-label">Sobre Caio</div><div class="mcard-brand">Caio Livio</div></div>
+        </div>
+        <div class="mcard" onclick="go('page-chat')">
+          <div class="mcard-media" style="background:var(--serie-origem)">
+            <div class="mcard-overlay">
+              <div class="mq-icon">🤖</div>
+              <div class="mq-text">"Tire suas dúvidas agora com a Cora."</div>
+              <div class="mq-tag">Curadoria Digital</div>
+            </div>
+          </div>
+          <div class="mcard-foot"><div class="mcard-label">Pergunte Agora</div><div class="mcard-brand">Caio Livio</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seletor de objetivos -->
+    <div class="dv"><div class="dl"></div><div class="dt">O que você está buscando?</div><div class="dl"></div></div>
+    <div class="symp-wrap">
+      <div class="symp-grid">
+        <button class="sc" onclick="sym(this,'decorar')">🏠 Decorar residência</button>
+        <button class="sc" onclick="sym(this,'corporativo')">🏢 Espaço corporativo</button>
+        <button class="sc" onclick="sym(this,'presente')">🎁 Presente especial</button>
+        <button class="sc" onclick="sym(this,'colecionar')">🖼️ Colecionar arte</button>
+        <button class="sc" onclick="sym(this,'encomenda')">🎨 Obra sob encomenda</button>
+        <button class="sc" onclick="sym(this,'conhecer')">📖 Conhecer o artista</button>
+        <button class="sc" onclick="sym(this,'investir')">💰 Investir em arte</button>
+      </div>
+      <div class="sr" id="sr"></div>
+    </div>
+
+    <!-- Depoimentos -->
+    <div class="dv"><div class="dl"></div><div class="dt">O que dizem os colecionadores</div><div class="dl"></div></div>
+    <div class="test-wrap"><div class="test-track" id="tt"></div></div>
+
+    <div class="foot">
+      <div class="ft">
+        📍 Recife, PE &nbsp;·&nbsp; Atendimento em todo o Brasil<br>
+        📱 <a href="https://wa.me/5581999999999">WhatsApp</a> &nbsp;·&nbsp;
+        <a href="https://www.instagram.com/caiolivioart">@caiolivioart</a>
+      </div>
+      <div class="fb">Caio Livio · Galeria Oficial</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FABs -->
+<div class="fabs" id="home-fabs">
+  <div class="fab-ai-wrap">
+    <span class="fab-ai-label">Tira dúvidas com a Cora</span>
+    <button class="fab fab-ai" onclick="go('page-chat')" title="Tira dúvidas com a Cora" style="font-family:'Playfair Display',serif;font-weight:700;font-size:22px">C</button>
+  </div>
+  <a class="fab fab-wa" href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20gostaria%20de%20falar%20com%20o%20curador%20sobre%20as%20obras%20de%20Caio%20Livio." target="_blank" rel="noopener" title="WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+
+<!-- ════════════════════════════════
+     QUEM SOU
+════════════════════════════════ -->
+<div class="pg subpg" id="page-sobre">
+  <div class="sp-head">
+    <button class="back-btn" onclick="back()">←</button>
+    <div class="sp-title">Quem Sou</div>
+  </div>
+  <div class="sp-body">
+    <div class="sobre-foto">
+      <img src="assets/images/caio-sobre.jpg" alt="Caio Livio, artista plástico">
+    </div>
+    <div class="exp-badges">
+      <span class="exp-b">+15 anos de trajetória</span>
+      <span class="exp-b">200+ obras autorais</span>
+      <span class="exp-b">5 séries exclusivas</span>
+      <span class="exp-b">Coleções por todo o Brasil</span>
+      <span class="exp-b">Curadoria personalizada</span>
+    </div>
+    <div class="sobre-block">
+      <div class="sobre-label">Trajetória</div>
+      <div class="sobre-txt">Nascido e radicado em Recife, Pernambuco, Caio Livio construiu ao longo de mais de <strong>quinze anos</strong> uma linguagem artística singular que dialoga com a abstração contemporânea sem perder a profundidade emocional que caracteriza cada tela.</div>
+    </div>
+    <div class="sobre-block">
+      <div class="sobre-label">Processo Criativo</div>
+      <div class="sobre-txt">Seu processo parte da observação minuciosa da natureza, das tensões urbanas e das camadas de memória e afeto que permeiam a experiência humana. Cada obra é o resultado de um <strong>diálogo entre acaso e intenção</strong>.</div>
+    </div>
+    <div class="sobre-block">
+      <div class="sobre-label">Acervo & Reconhecimento</div>
+      <div class="sobre-txt">Com um extenso acervo, consolida presença em <strong>coleções particulares e corporativas</strong> por todo o Brasil, tornando-se referência da pintura abstrata nordestina contemporânea.</div>
+    </div>
+    <div class="sobre-block">
+      <div class="sobre-label">Autenticidade</div>
+      <div class="sobre-txt">Todas as obras adquiridas através da galeria oficial acompanham <strong>certificado de autenticidade</strong>, com curadoria e suporte direto do artista.</div>
+    </div>
+    <a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%2C%20vi%20o%20perfil%20do%20Caio%20e%20quero%20falar%20com%20o%20curador." class="cta-btn" target="_blank" rel="noopener">Falar com o curador sobre uma obra</a>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════
+     ACERVO & SÉRIES
+════════════════════════════════ -->
+<div class="pg subpg" id="page-acervo">
+  <div class="sp-head">
+    <button class="back-btn" onclick="back()">←</button>
+    <div class="sp-title">Acervo & Séries</div>
+  </div>
+  <div class="sp-body">
+    <div class="cat-tabs">
+      <button class="ctab on" onclick="ctab(this,'ac-series')">🎨 Séries</button>
+      <button class="ctab" onclick="ctab(this,'ac-adquirir')">🖋️ Como Adquirir</button>
+    </div>
+
+    <div class="cat-pane on" id="ac-series">
+      <div class="cat-hero-row">
+        <div class="cat-ico" style="background:rgba(201,161,92,.1);border:1px solid rgba(201,161,92,.2)">🎨</div>
+        <div><div class="cat-name">Cinco Séries Exclusivas</div><div class="cat-sub">Cada uma, uma jornada temática distinta</div></div>
+      </div>
+      <p class="cat-desc">O acervo de Caio Livio está organizado em cinco séries, reunindo obras com profunda coerência visual e emocional.</p>
+
+      <div class="srv-block">
+        <div class="srv-head"><div class="srv-ico" style="background:var(--serie-essencia)"></div><div><div class="srv-ttl">Essência</div><div class="srv-sub">Exploração emocional · 42 obras</div></div></div>
+      </div>
+      <div class="srv-block">
+        <div class="srv-head"><div class="srv-ico" style="background:var(--serie-movimento)"></div><div><div class="srv-ttl">Movimento</div><div class="srv-sub">Dinamismo e energia · 38 obras</div></div></div>
+      </div>
+      <div class="srv-block">
+        <div class="srv-head"><div class="srv-ico" style="background:var(--serie-horizonte)"></div><div><div class="srv-ttl">Horizonte</div><div class="srv-sub">Paisagens abstratas · 45 obras</div></div></div>
+      </div>
+      <div class="srv-block">
+        <div class="srv-head"><div class="srv-ico" style="background:var(--serie-conexoes)"></div><div><div class="srv-ttl">Conexões</div><div class="srv-sub">Relações humanas · 35 obras</div></div></div>
+      </div>
+      <div class="srv-block">
+        <div class="srv-head"><div class="srv-ico" style="background:var(--serie-origem)"></div><div><div class="srv-ttl">Origem</div><div class="srv-sub">Raízes culturais brasileiras · 40 obras</div></div></div>
+      </div>
+      <a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20gostaria%20de%20receber%20o%20Cat%C3%A1logo%20Completo%20de%20Caio%20Livio%20em%20PDF." class="cta-btn" target="_blank" rel="noopener">Pedir catálogo completo em PDF</a>
+    </div>
+
+    <div class="cat-pane" id="ac-adquirir">
+      <div class="cat-hero-row">
+        <div class="cat-ico" style="background:rgba(201,161,92,.1);border:1px solid rgba(201,161,92,.2)">🖋️</div>
+        <div><div class="cat-name">Como Adquirir</div><div class="cat-sub">Curadoria personalizada do início ao fim</div></div>
+      </div>
+      <p class="cat-desc">A curadoria oferece atendimento próximo para colecionadores, arquitetos e empresas que desejam adquirir obras de Caio Livio.</p>
+      <div class="srv-block">
+        <div class="srv-head"><div class="srv-num">01</div><div><div class="srv-ttl">Converse com a curadoria</div><div class="srv-sub">Conte seu objetivo, estilo e ambiente</div></div></div>
+      </div>
+      <div class="srv-block">
+        <div class="srv-head"><div class="srv-num">02</div><div><div class="srv-ttl">Receba indicações personalizadas</div><div class="srv-sub">De acordo com o seu espaço e objetivo</div></div></div>
+      </div>
+      <div class="srv-block">
+        <div class="srv-head"><div class="srv-num">03</div><div><div class="srv-ttl">Feche a aquisição com certificado</div><div class="srv-sub">Toda obra acompanha certificado de autenticidade</div></div></div>
+      </div>
+      <a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20quero%20entender%20como%20funciona%20o%20processo%20de%20aquisi%C3%A7%C3%A3o%20de%20obras." class="cta-btn" target="_blank" rel="noopener">Falar com o curador</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════
+     COLECIONADORES
+════════════════════════════════ -->
+<div class="pg subpg" id="page-clientes">
+  <div class="sp-head">
+    <button class="back-btn" onclick="back()">←</button>
+    <div class="sp-title">Colecionadores</div>
+  </div>
+  <div class="sp-body">
+    <div class="cli-stats">
+      <div class="cs-box"><div class="cs-v">15+</div><div class="cs-l">Anos</div></div>
+      <div class="cs-box"><div class="cs-v">200+</div><div class="cs-l">Obras</div></div>
+      <div class="cs-box"><div class="cs-v">5 ★</div><div class="cs-l">Avaliação</div></div>
+    </div>
+    <div class="dep-strip">
+      <div class="dep-quote">"</div>
+      <div>
+        <div class="dep-body">Adquiri duas obras da série Horizonte para o meu escritório em São Paulo. A qualidade da pintura e a <strong>profundidade emocional</strong> das peças transformaram completamente o ambiente.</div>
+        <div class="dep-name">— Marcos Andrade, Empresário · São Paulo</div>
+      </div>
+    </div>
+    <div class="cli-card"><div class="cli-info">
+      <div class="cli-top"><div class="cli-ava">C</div><div><div class="cli-nm">Carla Mendes</div><div class="cli-mt">Arquiteta de Interiores · Recife</div></div><div class="cli-stars">★★★★★</div></div>
+      <div class="cli-txt">"As telas de Caio têm uma <strong>versatilidade estética extraordinária</strong>, se adaptando perfeitamente a projetos contemporâneos de alto padrão."</div>
+      <div class="cli-tag">Curadoria Corporativa</div>
+    </div></div>
+    <div class="cli-card"><div class="cli-info">
+      <div class="cli-top"><div class="cli-ava">A</div><div><div class="cli-nm">Ana Cláudia Ferreira</div><div class="cli-mt">Colecionadora de Arte · Fortaleza</div></div><div class="cli-stars">★★★★★</div></div>
+      <div class="cli-txt">"A série Essência é um dos trabalhos mais consistentes que encontrei na cena nordestina contemporânea. <strong>Obras que crescem com o tempo.</strong>"</div>
+      <div class="cli-tag">Série Essência</div>
+    </div></div>
+    <div class="cli-card"><div class="cli-info">
+      <div class="cli-top"><div class="cli-ava">M</div><div><div class="cli-nm">Marcos Andrade</div><div class="cli-mt">Empresário · São Paulo</div></div><div class="cli-stars">★★★★★</div></div>
+      <div class="cli-txt">"Caio tem um <strong>talento raro</strong> para capturar estados de alma em tela."</div>
+      <div class="cli-tag">Série Horizonte</div>
+    </div></div>
+    <a class="cli-cta" href="https://wa.me/5581999999999?text=Ol%C3%A1!%20Vim%20pelo%20biolink%20e%20quero%20come%C3%A7ar%20minha%20cole%C3%A7%C3%A3o." target="_blank" rel="noopener">Comece sua coleção 💬</a>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════
+     CHAT — Cora
+════════════════════════════════ -->
+<div class="pg subpg" id="page-chat">
+  <div class="sp-head">
+    <button class="back-btn" onclick="back()">←</button>
+    <div class="sp-title"><span class="ai-dot"></span>Cora</div>
+    <a class="handoff-btn" href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20gostaria%20de%20falar%20com%20o%20curador%20sobre%20as%20obras%20de%20Caio%20Livio." target="_blank" rel="noopener">👤 Curador</a>
+  </div>
+  <div class="handoff-bar">
+    <div class="handoff-txt">Prefere falar direto com o curador?</div>
+    <a class="handoff-btn" href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20tenho%20uma%20d%C3%BAvida%20sobre%20as%20obras." target="_blank" rel="noopener">💬 WhatsApp</a>
+  </div>
+  <div class="chat-area" id="chat-area"></div>
+  <div class="chat-bottom">
+    <div class="chat-qr" id="chat-qr"></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════
+     SCRIPTS — ordem de dependência
+════════════════════════════════ -->
+<script src="chatbot/config.js"></script>
+<script src="chatbot/flows.js"></script>
+<script src="chatbot/engine.js"></script>
+<script src="data/testimonials.js"></script>
+<script src="data/smap.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

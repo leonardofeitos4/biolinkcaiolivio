@@ -1,0 +1,52 @@
+/* ═══════════════════════════════════
+   VARIABLES & RESET — Caio Livio Biolink
+═══════════════════════════════════ */
+:root {
+  --g:#C9A15C; --g2:#E3C182; --g3:#DCB878;
+  --dark:#0C0A08; --dark2:#12100C; --card:#161109; --card2:#1C150D;
+  --border:rgba(201,161,92,0.14);
+  --text:#EDE4D5; --dim:#9C9080; --white:#F2EDE4;
+  --shadow:rgba(0,0,0,0.45);
+  --wa:#25d366;
+  --serie-essencia: linear-gradient(140deg,#7A2E14,#3B1408);
+  --serie-movimento: linear-gradient(140deg,#12324A,#081521);
+  --serie-horizonte: linear-gradient(140deg,#1E3D2A,#0A1810);
+  --serie-conexoes: linear-gradient(140deg,#6E5A14,#2A2106);
+  --serie-origem: linear-gradient(140deg,#4A2A3D,#1C0F18);
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--dark)}
+body{font-family:'Jost',sans-serif;color:var(--text);cursor:none;overscroll-behavior:none}
+@media(max-width:480px){body{cursor:auto}}
+
+/* ── Custom Cursor ── */
+#cur,#cur-r{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:opacity .2s}
+#cur{width:8px;height:8px;background:var(--g);mix-blend-mode:screen}
+#cur-r{width:28px;height:28px;border:1.5px solid var(--g);opacity:.4}
+@media(max-width:480px){#cur,#cur-r{display:none}}
+
+/* ── Canvas ── */
+#nc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+
+/* ══════════════════════════════
+   PAGE SYSTEM
+══════════════════════════════ */
+.pg{position:fixed;inset:0;z-index:10;background:var(--dark);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .38s;will-change:transform}
+#home{z-index:5;transform:translateX(0);background:transparent}
+#home.behind{transform:scale(.93) translateX(-5%);opacity:.45;pointer-events:none}
+.subpg{transform:translateX(100%);z-index:20;background:var(--dark)}
+.subpg.active{transform:translateX(0)}
+
+/* ── Animations ── */
+@keyframes fadeD{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeU{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes rip{to{transform:scale(5);opacity:0}}
+@keyframes slide{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes bi{from{transform:scale(0) rotate(-180deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fp{0%,100%{transform:scale(1);opacity:.18}50%{transform:scale(1.25);opacity:.05}}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes td{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-5px);opacity:1}}
