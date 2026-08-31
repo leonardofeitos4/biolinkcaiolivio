@@ -22,6 +22,12 @@ const origens = (process.env.ORIGENS_PERMITIDAS || '*').split(',');
 app.set('trust proxy', 1);
 app.use(cors({ origin: origens.includes('*') ? true : origens, credentials: true }));
 app.use(express.json({ limit: '256kb' }));
+app.use((req, res, next) => {
+  if (/\.(html|js|css)$/.test(req.path)) {
+    res.setHeader('Cache-Control', 'no-store');
+  }
+  next();
+});
 app.use(express.static(root));
 
 app.all('/api/criar-preferencia', criarPreferencia);
