@@ -1,0 +1,48 @@
+services:
+  app:
+    build: .
+    container_name: caiolivio-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORTA: 3005
+      DATABASE_URL: postgresql://${POSTGRES_USER:-caiolivio}:${POSTGRES_PASSWORD:-troque-esta-senha}@postgres:5437/${POSTGRES_DB:-caiolivio}
+      APP_SECRET: ${APP_SECRET:-troque-por-um-segredo-grande-com-32-caracteres}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-troque-esta-senha-admin}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
+      MP_CLIENT_ID: ${MP_CLIENT_ID:-}
+      MP_CLIENT_SECRET: ${MP_CLIENT_SECRET:-}
+      MP_REDIRECT_URI: ${MP_REDIRECT_URI:-https://caiolivio.evolvify.cloud/api/admin/mp/callback}
+      MP_WEBHOOK_SECRET: ${MP_WEBHOOK_SECRET:-}
+      MP_ACCESS_TOKEN: ${MP_ACCESS_TOKEN:-}
+      URL_SITE: ${URL_SITE:-https://caiolivio.evolvify.cloud}
+      URL_WEBHOOK: ${URL_WEBHOOK:-https://caiolivio.evolvify.cloud/api/webhook}
+      ORIGENS_PERMITIDAS: ${ORIGENS_PERMITIDAS:-https://caiolivio.evolvify.cloud,https://www.caiolivio.evolvify.cloud}
+      RESERVATION_MINUTES: ${RESERVATION_MINUTES:-30}
+    ports:
+      - "${APP_PORT:-3005}:3005"
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: caiolivio-postgres
+    restart: unless-stopped
+    command: ["postgres", "-p", "5437"]
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-caiolivio}
+      POSTGRES_USER: ${POSTGRES_USER:-caiolivio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-troque-esta-senha}
+    ports:
+      - "${POSTGRES_PORT:-5437}:5437"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-caiolivio} -d ${POSTGRES_DB:-caiolivio} -p 5437"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

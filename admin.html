@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Admin | Caio Livio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <section class="login-view" id="login-view">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">CL</span>
+        <div>
+          <h1>Admin Caio Livio</h1>
+          <p>Compras, compradores e Mercado Pago.</p>
+        </div>
+      </div>
+
+      <form class="login-form" id="login-form">
+        <label for="admin-password">Senha do painel</label>
+        <input id="admin-password" type="password" autocomplete="current-password" required>
+        <button type="submit">Entrar</button>
+        <p class="form-error" id="login-error" role="alert"></p>
+      </form>
+    </section>
+
+    <section class="panel-view" id="panel-view" hidden>
+      <header class="admin-head">
+        <div>
+          <p class="eyebrow">Painel mobile</p>
+          <h1>Compras</h1>
+        </div>
+        <button class="ghost-btn" id="logout-btn" type="button">Sair</button>
+      </header>
+
+      <section class="mp-panel" aria-labelledby="mp-title">
+        <div>
+          <p class="eyebrow">Mercado Pago</p>
+          <h2 id="mp-title">Conexao</h2>
+          <p id="mp-status">Verificando...</p>
+        </div>
+        <button id="mp-connect-btn" type="button">Conectar</button>
+      </section>
+
+      <section class="metrics" id="metrics" aria-label="Resumo de compras"></section>
+      <p class="notice" id="notice" role="status"></p>
+
+      <section class="orders-layout">
+        <div class="orders-list" id="orders-list"></div>
+        <aside class="order-detail" id="order-detail">
+          <div class="empty-detail">Selecione uma compra para ver os detalhes.</div>
+        </aside>
+      </section>
+    </section>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

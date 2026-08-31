@@ -6,7 +6,7 @@
 
    O front já faz tudo:
      1. monta o carrinho
-     2. coleta nome / e-mail / WhatsApp do comprador
+     2. coleta dados do comprador e endereco de entrega
      3. envia POST JSON para PAGAMENTO.endpoint
      4. espera { init_point: "https://..." } de volta
      5. redireciona o comprador para o Checkout Pro
@@ -36,7 +36,7 @@ const PAGAMENTO = {
      Enquanto estiver vazio, o site cai automaticamente no pedido
      via WhatsApp — nada quebra para o cliente final.
      Ex.: 'https://api.caiolivio.art/criar-preferencia'                */
-  endpoint: '',
+  endpoint: '/api/criar-preferencia',
 
   moeda: 'BRL',
 
@@ -65,9 +65,25 @@ function parcelaDe(v) {
   return brl(v / PAGAMENTO.parcelas);
 }
 
+function apenasDigitos(v) {
+  return String(v || '').replace(/\D/g, '');
+}
+
+function telefoneMercadoPago(v) {
+  const raw = apenasDigitos(v);
+  const local = raw.startsWith('55') ? raw.slice(2) : raw;
+  return {
+    raw,
+    area_code: local.slice(0, 2),
+    number: local.slice(2),
+  };
+}
+
 /* ── Monta o payload no formato que o Mercado Pago espera ── */
 function montarPedido(itens, comprador) {
   const base = location.href.split('#')[0].replace(/\/[^/]*$/, '/');
+  const telefone = telefoneMercadoPago(comprador.fone);
+  const endereco = comprador.endereco || {};
   return {
     items: itens.map(o => ({
       id: o.cod,
@@ -81,11 +97,26 @@ function montarPedido(itens, comprador) {
     payer: {
       name: comprador.nome,
       email: comprador.email,
-      phone: comprador.fone,
+      phone: telefone,
+      address: {
+        zip_code: endereco.cep,
+        state: endereco.estado,
+        city: endereco.cidade,
+        street_name: endereco.rua,
+        street_number: endereco.numero,
+      },
     },
     shipping: {
       gratis: PAGAMENTO.frete.gratis,
       custo: PAGAMENTO.frete.custo,
+      receiver_address: {
+        zip_code: endereco.cep,
+        state_name: endereco.estado,
+        city_name: endereco.cidade,
+        street_name: endereco.rua,
+        street_number: endereco.numero,
+        country_name: 'Brasil',
+      },
     },
     total: itens.reduce((s, o) => s + o.preco, 0) + PAGAMENTO.frete.custo,
     origem: 'biolink-caiolivio',
@@ -96,6 +127,7 @@ function montarPedido(itens, comprador) {
 function pedidoWhatsApp(itens, comprador) {
   const linhas = itens.map(o => `• ${o.titulo} (${o.cod}) — ${brl(o.preco)}`).join('\n');
   const total = itens.reduce((s, o) => s + o.preco, 0);
+  const e = comprador.endereco || {};
   const msg =
     `Olá! Vim pelo biolink e quero finalizar a compra:\n\n` +
     `${linhas}\n\n` +
@@ -103,7 +135,13 @@ function pedidoWhatsApp(itens, comprador) {
     `Frete: grátis para todo o Brasil\n\n` +
     `Nome: ${comprador.nome || '-'}\n` +
     `E-mail: ${comprador.email || '-'}\n` +
-    `WhatsApp: ${comprador.fone || '-'}`;
+    `WhatsApp: ${comprador.fone || '-'}\n\n` +
+    `Entrega:\n` +
+    `CEP: ${e.cep || '-'}\n` +
+    `Estado: ${e.estado || '-'}\n` +
+    `Cidade: ${e.cidade || '-'}\n` +
+    `Rua: ${e.rua || '-'}\n` +
+    `Numero: ${e.numero || '-'}`;
   return waLink(msg);
 }
 
