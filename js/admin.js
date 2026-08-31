@@ -143,26 +143,56 @@ function renderDetail() {
   `;
 }
 
-async function loadPanel() {
-  try {
-    const [orders, mp] = await Promise.all([
-      api('/api/admin/orders'),
-      api('/api/admin/mp/status'),
-    ]);
-    state.orders = orders.orders || [];
+async function loadPanel(options = {}) {
+  const afterLogin = Boolean(options.afterLogin);
+  if (afterLogin) {
+    showPanel();
+    $('notice').textContent = 'Login aceito. Carregando painel...';
+  }
+
+  const ordersResult = await api('/api/admin/orders').then(
+    data => ({ ok: true, data }),
+    err => ({ ok: false, err })
+  );
+  const mpResult = await api('/api/admin/mp/status').then(
+    data => ({ ok: true, data }),
+    err => ({ ok: false, err })
+  );
+
+  if (!afterLogin && ordersResult.err?.status === 401 && mpResult.err?.status === 401) {
+    showLogin();
+    return;
+  }
+
+  showPanel();
+
+  const notices = [];
+  if (ordersResult.ok) {
+    state.orders = ordersResult.data.orders || [];
+  } else {
+    state.orders = [];
+    if (ordersResult.err.status === 401) {
+      notices.push('Login aceito, mas a sessao nao voltou no cookie. Confira HTTPS/proxy/cookie.');
+    } else {
+      notices.push(`Compras: ${ordersResult.err.message}`);
+    }
+  }
+  renderOrders();
+
+  if (mpResult.ok) {
+    const mp = mpResult.data;
     $('mp-status').textContent = mp.connected
       ? `Conectado via ${mp.source === 'oauth' ? 'OAuth' : 'token do servidor'}${mp.user_id ? ` · ${mp.user_id}` : ''}`
       : 'Conta ainda nao conectada.';
     $('mp-connect-btn').textContent = mp.connected ? 'Reconectar' : 'Conectar';
-    showPanel();
-    renderOrders();
-  } catch (err) {
-    if (err.status === 401) showLogin();
-    else {
-      showPanel();
-      $('notice').textContent = err.message;
-    }
+  } else {
+    $('mp-status').textContent = mpResult.err.status === 401
+      ? 'Sessao admin nao autenticada.'
+      : mpResult.err.message;
+    if (mpResult.err.status !== 401) notices.push(`Mercado Pago: ${mpResult.err.message}`);
   }
+
+  $('notice').textContent = notices.join(' ');
 }
 
 $('login-form').addEventListener('submit', async event => {
@@ -174,7 +204,7 @@ $('login-form').addEventListener('submit', async event => {
       body: JSON.stringify({ password: $('admin-password').value }),
     });
     $('admin-password').value = '';
-    await loadPanel();
+    await loadPanel({ afterLogin: true });
   } catch (err) {
     $('login-error').textContent = err.message;
   }

@@ -5,8 +5,12 @@ module.exports = async (req, res) => {
   if (!method(req, res, ['POST'])) return;
   try {
     const data = await body(req);
-    if (!verifyPassword(data.password || '')) return json(res, 401, { erro: 'Senha invalida' });
+    if (!verifyPassword(data.password || '')) {
+      console.warn('[admin/login] senha invalida');
+      return json(res, 401, { erro: 'Senha invalida' });
+    }
     setSession(req, res);
+    console.info('[admin/login] login aprovado');
     json(res, 200, { ok: true });
   } catch (err) {
     console.error('[admin/login]', err);

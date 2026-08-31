@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
   try {
     json(res, 200, await status());
   } catch (err) {
-    console.error('[admin/mp/status]', err);
+    console.error('[admin/mp/status]', err.message, err.stack);
     json(res, 500, { erro: err.message || 'Falha ao consultar Mercado Pago' });
   }
 };

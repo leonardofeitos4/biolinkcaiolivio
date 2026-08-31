@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
     `);
     json(res, 200, { orders: result.rows });
   } catch (err) {
-    console.error('[admin/orders]', err);
-    json(res, 500, { erro: 'Falha ao listar compras' });
+    console.error('[admin/orders]', err.message, err.stack);
+    json(res, 500, { erro: err.message || 'Falha ao listar compras' });
   }
 };
