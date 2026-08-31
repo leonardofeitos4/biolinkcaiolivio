@@ -12,6 +12,10 @@ const authState = {
 const $ = id => document.getElementById(id);
 const TOKEN_KEY = 'cl_admin_token';
 
+function debugLog(message, details = {}) {
+  console.info(message, details);
+}
+
 function brl(v) {
   return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
@@ -33,7 +37,9 @@ async function api(url, options = {}) {
     ...(options.headers || {}),
   };
 
-  console.info('[admin/api]', options.method || 'GET', url, {
+  debugLog('[admin/api] request', {
+    method: options.method || 'GET',
+    url,
     authenticated: authState.authenticated,
     hasBearer: Boolean(token),
   });
@@ -44,6 +50,12 @@ async function api(url, options = {}) {
     headers,
   });
   const data = await res.json().catch(() => ({}));
+  debugLog('[admin/api] response', {
+    method: options.method || 'GET',
+    url,
+    status: res.status,
+    ok: res.ok,
+  });
   if (!res.ok) {
     const err = new Error(data.erro || 'Falha na requisicao');
     err.status = res.status;
@@ -200,13 +212,14 @@ async function loadPanel(options = {}) {
   const afterLogin = Boolean(options.afterLogin);
   const hasSavedToken = Boolean(authState.token || getStoredToken());
 
+  try {
   if (afterLogin || hasSavedToken) {
     authState.authenticated = true;
     showPanel();
     $('notice').textContent = afterLogin ? 'Login aceito. Carregando painel...' : 'Carregando painel...';
   }
 
-  console.info('[admin/panel] loadPanel inicio', { requestId, afterLogin, hasSavedToken });
+  debugLog('[admin/panel] loadPanel inicio', { requestId, afterLogin, hasSavedToken });
 
   const [ordersResult, mpResult] = await Promise.all([
     api('/api/admin/orders').then(
@@ -220,9 +233,17 @@ async function loadPanel(options = {}) {
   ]);
 
   if (requestId !== authState.loadingId) {
-    console.info('[admin/panel] resposta antiga ignorada', { requestId, active: authState.loadingId });
+    debugLog('[admin/panel] resposta antiga ignorada', { requestId, active: authState.loadingId });
     return;
   }
+
+  debugLog('[admin/panel] respostas recebidas', {
+    requestId,
+    ordersOk: ordersResult.ok,
+    ordersStatus: ordersResult.err?.status || 200,
+    mpOk: mpResult.ok,
+    mpStatus: mpResult.err?.status || 200,
+  });
 
   if (!afterLogin && !authState.authenticated && ordersResult.err?.status === 401 && mpResult.err?.status === 401) {
     showLogin({ force: true });
@@ -264,11 +285,21 @@ async function loadPanel(options = {}) {
   }
 
   $('notice').textContent = notices.join(' ');
+  debugLog('[admin/panel] painel renderizado', { requestId, orders: state.orders.length });
+  } catch (err) {
+    console.error('[admin/panel] erro ao renderizar', err);
+    if (requestId === authState.loadingId) {
+      authState.authenticated = true;
+      showPanel();
+      $('notice').textContent = `Painel abriu, mas houve erro ao renderizar: ${err.message}`;
+    }
+  }
 }
 
 $('login-form').addEventListener('submit', async event => {
   event.preventDefault();
   const loginRequestId = ++authState.loadingId;
+  authState.authenticated = true;
   $('login-error').textContent = '';
   try {
     console.info('[admin/login] enviando senha');
@@ -290,7 +321,7 @@ $('login-form').addEventListener('submit', async event => {
     $('admin-password').value = '';
     showPanel();
     $('notice').textContent = 'Login aceito. Carregando painel...';
-    await loadPanel({ afterLogin: true });
+    loadPanel({ afterLogin: true });
   } catch (err) {
     authState.authenticated = false;
     $('login-error').textContent = err.message;
