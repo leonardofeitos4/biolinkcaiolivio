@@ -1,6 +1,7 @@
 const state = {
   orders: [],
   selectedId: null,
+  token: null,
 };
 
 const $ = id => document.getElementById(id);
@@ -20,7 +21,7 @@ function esc(v) {
 }
 
 async function api(url, options = {}) {
-  const token = sessionStorage.getItem(TOKEN_KEY);
+  const token = state.token || getStoredToken();
   const res = await fetch(url, {
     credentials: 'include',
     headers: {
@@ -37,6 +38,35 @@ async function api(url, options = {}) {
     throw err;
   }
   return data;
+}
+
+function getStoredToken() {
+  try {
+    return sessionStorage.getItem(TOKEN_KEY);
+  } catch (err) {
+    return null;
+  }
+}
+
+function storeToken(token) {
+  state.token = token || null;
+  try {
+    if (token) sessionStorage.setItem(TOKEN_KEY, token);
+  } catch (err) {
+    showDebug(`Sessao mantida apenas nesta tela: ${err.message}`);
+  }
+}
+
+function clearToken() {
+  state.token = null;
+  try {
+    sessionStorage.removeItem(TOKEN_KEY);
+  } catch (err) {}
+}
+
+function showDebug(message) {
+  const target = $('panel-view').hidden ? $('login-error') : $('notice');
+  if (target) target.textContent = message;
 }
 
 function showLogin() {
@@ -209,7 +239,7 @@ $('login-form').addEventListener('submit', async event => {
       method: 'POST',
       body: JSON.stringify({ password: $('admin-password').value }),
     });
-    if (login.token) sessionStorage.setItem(TOKEN_KEY, login.token);
+    storeToken(login.token);
     $('admin-password').value = '';
     showPanel();
     $('notice').textContent = 'Login aceito. Carregando painel...';
@@ -221,7 +251,7 @@ $('login-form').addEventListener('submit', async event => {
 
 $('logout-btn').addEventListener('click', async () => {
   await api('/api/admin/logout', { method: 'POST' }).catch(() => {});
-  sessionStorage.removeItem(TOKEN_KEY);
+  clearToken();
   showLogin();
 });
 
@@ -239,5 +269,12 @@ const params = new URLSearchParams(location.search);
 if (params.get('mp') === 'connected') {
   history.replaceState({}, '', '/admin.html');
 }
+
+storeToken(getStoredToken());
+window.addEventListener('error', event => showDebug(`Erro no painel: ${event.message}`));
+window.addEventListener('unhandledrejection', event => {
+  const reason = event.reason;
+  showDebug(`Erro no painel: ${reason?.message || reason || 'falha inesperada'}`);
+});
 
 loadPanel();
