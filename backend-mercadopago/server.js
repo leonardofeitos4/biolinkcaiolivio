@@ -19,6 +19,7 @@ const app = express();
 const root = path.join(__dirname, '..');
 const origens = (process.env.ORIGENS_PERMITIDAS || '*').split(',');
 
+app.set('trust proxy', 1);
 app.use(cors({ origin: origens.includes('*') ? true : origens, credentials: true }));
 app.use(express.json({ limit: '256kb' }));
 app.use(express.static(root));

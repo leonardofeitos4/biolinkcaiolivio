@@ -13,6 +13,7 @@ services:
       APP_SECRET: ${APP_SECRET:-troque-por-um-segredo-grande-com-32-caracteres}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-troque-esta-senha-admin}
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
+      COOKIE_SECURE: ${COOKIE_SECURE:-auto}
       MP_CLIENT_ID: ${MP_CLIENT_ID:-}
       MP_CLIENT_SECRET: ${MP_CLIENT_SECRET:-}
       MP_REDIRECT_URI: ${MP_REDIRECT_URI:-https://caiolivio.evolvify.cloud/api/admin/mp/callback}

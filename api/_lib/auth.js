@@ -45,9 +45,16 @@ function verifySession(token) {
   }
 }
 
-function setSession(res) {
+function shouldUseSecureCookie(req) {
+  if (process.env.COOKIE_SECURE === 'true') return true;
+  if (process.env.COOKIE_SECURE === 'false') return false;
+  const proto = String(req?.headers?.['x-forwarded-proto'] || '').split(',')[0].trim();
+  return proto === 'https' || Boolean(req?.socket?.encrypted);
+}
+
+function setSession(req, res) {
   const token = sign({ role: 'admin', exp: Math.floor(Date.now() / 1000) + ONE_DAY });
-  const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+  const secure = shouldUseSecureCookie(req) ? '; Secure' : '';
   res.setHeader('Set-Cookie', `${COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${ONE_DAY}${secure}`);
 }
 

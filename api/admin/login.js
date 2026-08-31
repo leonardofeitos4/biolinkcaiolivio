@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
   try {
     const data = await body(req);
     if (!verifyPassword(data.password || '')) return json(res, 401, { erro: 'Senha invalida' });
-    setSession(res);
+    setSession(req, res);
     json(res, 200, { ok: true });
   } catch (err) {
     console.error('[admin/login]', err);
