@@ -1,12 +1,14 @@
 const { json, method } = require('../_lib/http');
 const { requireAdmin } = require('../_lib/auth');
 const { query } = require('../_lib/db');
+const { cancelExpiredCreatedOrders } = require('../_lib/orders');
 
 module.exports = async (req, res) => {
   if (!method(req, res, ['GET'])) return;
   if (!requireAdmin(req, res)) return;
 
   try {
+    await cancelExpiredCreatedOrders();
     const result = await query(`
       SELECT
         o.id,

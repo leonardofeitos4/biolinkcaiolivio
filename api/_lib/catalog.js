@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const { query } = require('./db');
+const { cancelExpiredCreatedOrders } = require('./orders');
 
 const CATALOGO_PATH = path.join(__dirname, '..', '..', 'data', 'obras.js');
 
@@ -14,6 +15,7 @@ function carregarCatalogo() {
 
 async function codigosIndisponiveis() {
   const minutos = Number(process.env.RESERVATION_MINUTES || 30);
+  await cancelExpiredCreatedOrders();
   const sold = await query(`
     SELECT DISTINCT oi.artwork_code
     FROM order_items oi

@@ -14,6 +14,7 @@ const adminOrders = require('../api/admin/orders');
 const mpConnect = require('../api/admin/mp/connect');
 const mpCallback = require('../api/admin/mp/callback');
 const mpStatus = require('../api/admin/mp/status');
+const { cancelExpiredCreatedOrders } = require('../api/_lib/orders');
 
 const app = express();
 const root = path.join(__dirname, '..');
@@ -64,3 +65,15 @@ const PORTA = process.env.PORTA || 3005;
 app.listen(PORTA, () => {
   console.log(`Backend Caio Livio em http://localhost:${PORTA}`);
 });
+
+if (process.env.DATABASE_URL) {
+  const cleanupEveryMinutes = Math.max(1, Number(process.env.ORDER_CLEANUP_INTERVAL_MINUTES || 5));
+  const cleanup = () => {
+    cancelExpiredCreatedOrders().catch(err => {
+      console.error('[orders/cleanup]', err.message || err);
+    });
+  };
+
+  setTimeout(cleanup, 10 * 1000);
+  setInterval(cleanup, cleanupEveryMinutes * 60 * 1000);
+}

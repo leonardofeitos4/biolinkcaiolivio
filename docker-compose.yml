@@ -24,6 +24,7 @@ services:
       URL_WEBHOOK: ${URL_WEBHOOK:-https://caiolivio.evolvify.cloud/api/webhook}
       ORIGENS_PERMITIDAS: ${ORIGENS_PERMITIDAS:-https://caiolivio.evolvify.cloud,https://www.caiolivio.evolvify.cloud}
       RESERVATION_MINUTES: ${RESERVATION_MINUTES:-30}
+      ORDER_CLEANUP_INTERVAL_MINUTES: ${ORDER_CLEANUP_INTERVAL_MINUTES:-5}
     ports:
       - "${APP_PORT:-3005}:3005"
 
