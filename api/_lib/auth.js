@@ -30,6 +30,10 @@ function sign(payload) {
   return `${data}.${sig}`;
 }
 
+function createSessionToken() {
+  return sign({ role: 'admin', exp: Math.floor(Date.now() / 1000) + ONE_DAY });
+}
+
 function verifySession(token) {
   if (!token || !process.env.APP_SECRET) return null;
   const [data, sig] = token.split('.');
@@ -53,9 +57,10 @@ function shouldUseSecureCookie(req) {
 }
 
 function setSession(req, res) {
-  const token = sign({ role: 'admin', exp: Math.floor(Date.now() / 1000) + ONE_DAY });
+  const token = createSessionToken();
   const secure = shouldUseSecureCookie(req) ? '; Secure' : '';
   res.setHeader('Set-Cookie', `${COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${ONE_DAY}${secure}`);
+  return token;
 }
 
 function clearSession(res) {
@@ -63,10 +68,11 @@ function clearSession(res) {
 }
 
 function requireAdmin(req, res) {
-  const session = verifySession(parseCookies(req.headers.cookie)[COOKIE]);
+  const bearer = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+  const session = verifySession(parseCookies(req.headers.cookie)[COOKIE]) || verifySession(bearer);
   if (session) return session;
   json(res, 401, { erro: 'Nao autorizado' });
   return null;
 }
 
-module.exports = { verifyPassword, setSession, clearSession, requireAdmin, hash };
+module.exports = { verifyPassword, setSession, clearSession, requireAdmin, hash, createSessionToken };

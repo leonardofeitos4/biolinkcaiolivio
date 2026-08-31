@@ -4,6 +4,7 @@ const state = {
 };
 
 const $ = id => document.getElementById(id);
+const TOKEN_KEY = 'cl_admin_token';
 
 function brl(v) {
   return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -19,9 +20,14 @@ function esc(v) {
 }
 
 async function api(url, options = {}) {
+  const token = sessionStorage.getItem(TOKEN_KEY);
   const res = await fetch(url, {
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {}),
+    },
     ...options,
   });
   const data = await res.json().catch(() => ({}));
@@ -206,10 +212,11 @@ $('login-form').addEventListener('submit', async event => {
   event.preventDefault();
   $('login-error').textContent = '';
   try {
-    await api('/api/admin/login', {
+    const login = await api('/api/admin/login', {
       method: 'POST',
       body: JSON.stringify({ password: $('admin-password').value }),
     });
+    if (login.token) sessionStorage.setItem(TOKEN_KEY, login.token);
     $('admin-password').value = '';
     showPanel();
     $('notice').textContent = 'Login aceito. Abrindo painel...';
@@ -221,6 +228,7 @@ $('login-form').addEventListener('submit', async event => {
 
 $('logout-btn').addEventListener('click', async () => {
   await api('/api/admin/logout', { method: 'POST' }).catch(() => {});
+  sessionStorage.removeItem(TOKEN_KEY);
   showLogin();
 });
 

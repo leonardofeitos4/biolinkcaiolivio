@@ -9,9 +9,9 @@ module.exports = async (req, res) => {
       console.warn('[admin/login] senha invalida');
       return json(res, 401, { erro: 'Senha invalida' });
     }
-    setSession(req, res);
+    const token = setSession(req, res);
     console.info('[admin/login] login aprovado');
-    json(res, 200, { ok: true });
+    json(res, 200, { ok: true, token });
   } catch (err) {
     console.error('[admin/login]', err);
     json(res, 500, { erro: err.message || 'Falha no login' });
