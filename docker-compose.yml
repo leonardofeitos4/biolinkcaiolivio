@@ -10,6 +10,7 @@ services:
       NODE_ENV: production
       PORTA: 3005
       DATABASE_URL: postgresql://${POSTGRES_USER:-caiolivio}:${POSTGRES_PASSWORD:-troque-esta-senha}@postgres:5437/${POSTGRES_DB:-caiolivio}
+      PGSSL_DISABLED: "true"
       APP_SECRET: ${APP_SECRET:-troque-por-um-segredo-grande-com-32-caracteres}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-troque-esta-senha-admin}
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
