@@ -1,6 +1,11 @@
 const state = {
   orders: [],
   selectedId: null,
+};
+
+const authState = {
+  authenticated: false,
+  loadingId: 0,
   token: null,
 };
 
@@ -21,15 +26,22 @@ function esc(v) {
 }
 
 async function api(url, options = {}) {
-  const token = state.token || getStoredToken();
+  const token = authState.token || getStoredToken();
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers || {}),
+  };
+
+  console.info('[admin/api]', options.method || 'GET', url, {
+    authenticated: authState.authenticated,
+    hasBearer: Boolean(token),
+  });
+
   const res = await fetch(url, {
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers || {}),
-    },
     ...options,
+    headers,
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
@@ -49,7 +61,8 @@ function getStoredToken() {
 }
 
 function storeToken(token) {
-  state.token = token || null;
+  authState.token = token || null;
+  authState.authenticated = Boolean(token);
   try {
     if (token) sessionStorage.setItem(TOKEN_KEY, token);
   } catch (err) {
@@ -58,7 +71,8 @@ function storeToken(token) {
 }
 
 function clearToken() {
-  state.token = null;
+  authState.token = null;
+  authState.authenticated = false;
   try {
     sessionStorage.removeItem(TOKEN_KEY);
   } catch (err) {}
@@ -69,12 +83,14 @@ function showDebug(message) {
   if (target) target.textContent = message;
 }
 
-function showLogin() {
+function showLogin(options = {}) {
+  if (!options.force && (authState.authenticated || authState.token || getStoredToken())) return;
   $('login-view').hidden = false;
   $('panel-view').hidden = true;
 }
 
 function showPanel() {
+  authState.authenticated = true;
   $('login-view').hidden = true;
   $('panel-view').hidden = false;
 }
@@ -180,23 +196,42 @@ function renderDetail() {
 }
 
 async function loadPanel(options = {}) {
+  const requestId = ++authState.loadingId;
   const afterLogin = Boolean(options.afterLogin);
-  if (afterLogin) {
+  const hasSavedToken = Boolean(authState.token || getStoredToken());
+
+  if (afterLogin || hasSavedToken) {
+    authState.authenticated = true;
     showPanel();
-    $('notice').textContent = 'Login aceito. Carregando painel...';
+    $('notice').textContent = afterLogin ? 'Login aceito. Carregando painel...' : 'Carregando painel...';
   }
 
-  const ordersResult = await api('/api/admin/orders').then(
-    data => ({ ok: true, data }),
-    err => ({ ok: false, err })
-  );
-  const mpResult = await api('/api/admin/mp/status').then(
-    data => ({ ok: true, data }),
-    err => ({ ok: false, err })
-  );
+  console.info('[admin/panel] loadPanel inicio', { requestId, afterLogin, hasSavedToken });
 
-  if (!afterLogin && ordersResult.err?.status === 401 && mpResult.err?.status === 401) {
-    showLogin();
+  const [ordersResult, mpResult] = await Promise.all([
+    api('/api/admin/orders').then(
+      data => ({ ok: true, data }),
+      err => ({ ok: false, err })
+    ),
+    api('/api/admin/mp/status').then(
+      data => ({ ok: true, data }),
+      err => ({ ok: false, err })
+    ),
+  ]);
+
+  if (requestId !== authState.loadingId) {
+    console.info('[admin/panel] resposta antiga ignorada', { requestId, active: authState.loadingId });
+    return;
+  }
+
+  if (!afterLogin && !authState.authenticated && ordersResult.err?.status === 401 && mpResult.err?.status === 401) {
+    showLogin({ force: true });
+    return;
+  }
+
+  if (ordersResult.err?.status === 401 && mpResult.err?.status === 401 && !authState.token && !getStoredToken()) {
+    authState.authenticated = false;
+    showLogin({ force: true });
     return;
   }
 
@@ -233,26 +268,41 @@ async function loadPanel(options = {}) {
 
 $('login-form').addEventListener('submit', async event => {
   event.preventDefault();
+  const loginRequestId = ++authState.loadingId;
   $('login-error').textContent = '';
   try {
+    console.info('[admin/login] enviando senha');
     const login = await api('/api/admin/login', {
       method: 'POST',
       body: JSON.stringify({ password: $('admin-password').value }),
     });
+
+    if (loginRequestId !== authState.loadingId) {
+      console.info('[admin/login] resposta antiga ignorada', { loginRequestId, active: authState.loadingId });
+      return;
+    }
+
+    if (!login.token) {
+      throw new Error('Login aceito, mas token nao retornou');
+    }
+
     storeToken(login.token);
     $('admin-password').value = '';
     showPanel();
     $('notice').textContent = 'Login aceito. Carregando painel...';
     await loadPanel({ afterLogin: true });
   } catch (err) {
+    authState.authenticated = false;
     $('login-error').textContent = err.message;
+    showLogin({ force: true });
   }
 });
 
 $('logout-btn').addEventListener('click', async () => {
   await api('/api/admin/logout', { method: 'POST' }).catch(() => {});
   clearToken();
-  showLogin();
+  authState.loadingId += 1;
+  showLogin({ force: true });
 });
 
 $('mp-connect-btn').addEventListener('click', async () => {

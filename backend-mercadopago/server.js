@@ -23,6 +23,22 @@ app.set('trust proxy', 1);
 app.use(cors({ origin: origens.includes('*') ? true : origens, credentials: true }));
 app.use(express.json({ limit: '256kb' }));
 app.use((req, res, next) => {
+  if (req.path.startsWith('/api/admin/')) {
+    const startedAt = Date.now();
+    res.on('finish', () => {
+      console.info('[admin/http]', {
+        method: req.method,
+        path: req.path,
+        status: res.statusCode,
+        hasCookie: Boolean(req.headers.cookie),
+        hasBearer: Boolean(req.headers.authorization),
+        ms: Date.now() - startedAt,
+      });
+    });
+  }
+  next();
+});
+app.use((req, res, next) => {
   if (/\.(html|js|css)$/.test(req.path)) {
     res.setHeader('Cache-Control', 'no-store');
   }
