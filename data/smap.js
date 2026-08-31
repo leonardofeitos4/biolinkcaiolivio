@@ -2,35 +2,53 @@
    DATA — Seletor de Objetivos (Home)
    Para adicionar: nova entrada no
    objeto smap + botão no HTML.
+
+   d  → texto da resposta (HTML)
+   wa → mensagem que abre no WhatsApp
+   loja → true mostra o botão "Ver obras à venda"
 ═══════════════════════════════════ */
 const smap = {
   decorar: {
     r: '🏠 Decorar uma Residência',
-    d: 'Uma obra certa transforma completamente um ambiente. A curadoria indica peças de acordo com a <strong>luz, a paleta e o clima</strong> do seu espaço.<br><br><a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20quero%20indica%C3%A7%C3%B5es%20de%20obras%20para%20decorar%20minha%20resid%C3%AAncia." target="_blank">→ Quero indicações</a>'
+    d: 'Uma obra certa transforma completamente um ambiente. Na loja, cada peça aparece <strong>já aplicada em um ambiente real</strong> — fica fácil imaginar na sua parede.',
+    wa: 'Vim pelo biolink e quero indicações de obras para decorar minha residência.',
+    loja: true,
   },
   corporativo: {
     r: '🏢 Espaço Corporativo',
-    d: 'Obras de Caio Livio já estão em escritórios, clínicas e recepções por todo o Brasil. A curadoria sugere peças em <strong>escala pensada para espaços comerciais</strong> de alto padrão.<br><br><a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20quero%20curadoria%20de%20obras%20para%20um%20espa%C3%A7o%20corporativo." target="_blank">→ Falar sobre curadoria corporativa</a>'
+    d: 'Obras de Caio Livio já estão em escritórios, clínicas e recepções por todo o Brasil. As <strong>duplas (dípticos)</strong> funcionam especialmente bem em recepções e salas de reunião.',
+    wa: 'Vim pelo biolink e quero curadoria de obras para um espaço corporativo.',
+    loja: true,
   },
   presente: {
     r: '🎁 Presente Especial',
-    d: 'Uma obra original é um presente que dura a vida toda. A curadoria ajuda a <strong>escolher a peça certa</strong> com base no gosto de quem vai recebê-la e no espaço onde ela vai ficar.<br><br><a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20quero%20uma%20sugest%C3%A3o%20de%20obra%20para%20dar%20de%20presente." target="_blank">→ Quero uma sugestão</a>'
+    d: 'Uma obra original é um presente que dura a vida toda. Com <strong>frete grátis</strong>, você pode enviar direto para o endereço de quem vai receber.',
+    wa: 'Vim pelo biolink e quero uma sugestão de obra para dar de presente.',
+    loja: true,
   },
   colecionar: {
     r: '🖼️ Começar a Colecionar',
-    d: 'Começar (ou expandir) uma coleção é sempre especial. A curadoria explica cada uma das <strong>cinco séries exclusivas</strong>, o processo de aquisição e o certificado de autenticidade — no seu ritmo.<br><br><a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20quero%20come%C3%A7ar%20a%20colecionar%20obras%20de%20Caio%20Livio." target="_blank">→ Conhecer o acervo</a>'
+    d: 'Todas as obras à venda são <strong>peças únicas originais</strong>, assinadas e com certificado de autenticidade. Uma vez vendida, a peça sai do acervo disponível.',
+    wa: 'Vim pelo biolink e quero começar a colecionar obras de Caio Livio.',
+    loja: true,
   },
   encomenda: {
     r: '🎨 Obra Sob Encomenda',
-    d: 'Caio também desenvolve <strong>peças personalizadas</strong>, alinhadas à paleta e às dimensões do seu projeto — ideais para arquitetos e decoradores com um espaço específico em mente.<br><br><a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20quero%20saber%20mais%20sobre%20obras%20sob%20encomenda." target="_blank">→ Falar sobre encomenda</a>'
+    d: 'Caio também desenvolve <strong>peças personalizadas</strong>, alinhadas à paleta e às dimensões do seu projeto — ideais para arquitetos e decoradores com um espaço específico em mente. Encomendas são orçadas caso a caso pela curadoria.',
+    wa: 'Vim pelo biolink e quero saber mais sobre obras sob encomenda.',
+    loja: false,
   },
   conhecer: {
     r: '📖 Conhecer o Artista',
-    d: 'Caio Livio é artista plástico radicado em Recife, com <strong>mais de 15 anos de trajetória</strong> em pintura abstrata contemporânea e presença em coleções por todo o Brasil.<br><br><a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20quero%20conhecer%20mais%20sobre%20a%20trajet%C3%B3ria%20de%20Caio%20Livio." target="_blank">→ Saber mais sobre o artista</a>'
+    d: 'Caio Livio é artista plástico radicado em Recife, com <strong>mais de 15 anos de trajetória</strong>. Já expôs na Fenearte, na CasaCor e em mostras internacionais em Roma, no Vaticano e em Paris.',
+    wa: 'Vim pelo biolink e quero conhecer mais sobre a trajetória de Caio Livio.',
+    loja: false,
   },
   investir: {
     r: '💰 Investir em Arte',
-    d: 'Peças originais com <strong>certificado de autenticidade</strong> e curadoria consistente são um dos ativos mais duradouros de uma coleção. A curadoria explica o processo com transparência.<br><br><a href="https://wa.me/5581999999999?text=Vim%20pelo%20biolink%20e%20quero%20entender%20melhor%20como%20funciona%20investir%20em%20obras%20de%20Caio%20Livio." target="_blank">→ Entender o processo</a>'
+    d: 'Peças originais com <strong>certificado de autenticidade</strong> e curadoria consistente são um dos ativos mais duradouros de uma coleção. Cada obra do acervo é única — não há reimpressão nem reprodução.',
+    wa: 'Vim pelo biolink e quero entender melhor como funciona investir em obras de Caio Livio.',
+    loja: true,
   },
 };
 
@@ -39,6 +57,9 @@ function sym(btn, k) {
   btn.classList.add('on');
   const el = document.getElementById('sr');
   const d = smap[k];
-  el.innerHTML = `<strong>${d.r}</strong><br><br>${d.d}`;
+  el.innerHTML =
+    `<strong>${d.r}</strong><br><br>${d.d}<br><br>` +
+    (d.loja ? `<a class="sr-cta" onclick="irParaLoja()">🛒 Ver obras à venda</a>` : '') +
+    `<a class="sr-cta sr-cta-wa" href="${waLink(d.wa)}" target="_blank" rel="noopener">💬 Falar com o curador</a>`;
   el.classList.add('show');
 }

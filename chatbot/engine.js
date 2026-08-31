@@ -14,6 +14,8 @@ function showChips(chips, area) {
 
   let html = chips.map(c => {
     if (c.wa) return `<a class="qrb qrb-wa" href="${waLink(c.wa)}" target="_blank" rel="noopener">${c.l}</a>`;
+    /* c.acao → executa uma função do site (ex.: abrir a loja) */
+    if (c.acao) return `<button class="qrb qrb-loja" onclick="${c.acao}">${c.l}</button>`;
     return `<button class="qrb" onclick="runFlow('${c.f}','${c.l.replace(/'/g, "\\'")}')">${c.l}</button>`;
   }).join('');
 

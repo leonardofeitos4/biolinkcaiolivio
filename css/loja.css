@@ -1,0 +1,117 @@
+/* ═══════════════════════════════════
+   LOJA — vitrine, ficha da obra, carrinho
+═══════════════════════════════════ */
+
+/* ── Vitrine da Home (carrossel) ── */
+.vitrine-wrap{width:100%;max-width:420px;overflow:hidden;animation:fadeU .65s .22s ease both}
+.vitrine{display:flex;gap:12px;overflow-x:auto;padding:4px 8px 14px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+.vitrine::-webkit-scrollbar{display:none}
+.vcard{flex-shrink:0;width:172px;border-radius:15px;overflow:hidden;scroll-snap-align:start;cursor:pointer;background:var(--card);border:1px solid rgba(201,161,92,.14);transition:transform .28s cubic-bezier(.34,1.56,.64,1),box-shadow .28s,border-color .28s}
+.vcard:active{transform:scale(.96)}
+@media(hover:hover){.vcard:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(201,161,92,.16);border-color:rgba(201,161,92,.34)}}
+.vcard-img{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--card2)}
+.vcard-img img{width:100%;height:100%;object-fit:cover;display:block}
+.vcard-tipo{position:absolute;top:8px;left:8px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:rgba(12,10,8,.72);border:1px solid rgba(201,161,92,.3);color:var(--g);backdrop-filter:blur(6px)}
+.vcard-foot{padding:10px 11px 12px;border-top:1px solid rgba(201,161,92,.1)}
+.vcard-ttl{font-family:'Playfair Display',serif;font-size:13.5px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vcard-preco{font-size:13px;font-weight:600;color:var(--g);margin-top:3px}
+.vcard-btn{width:100%;margin-top:8px;padding:7px;border:none;border-radius:9px;background:linear-gradient(135deg,var(--g),var(--g2));color:var(--dark);font-family:'Jost',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:transform .18s}
+.vcard-btn:active{transform:scale(.94)}
+
+/* Faixa de confiança sob a vitrine */
+.trust{width:100%;max-width:420px;display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
+.trust span{font-size:10px;font-weight:600;color:var(--dim);padding:5px 10px;border-radius:20px;background:rgba(201,161,92,.05);border:1px solid rgba(201,161,92,.14)}
+.trust b{color:var(--g);font-weight:700}
+
+/* ── Cabeçalho: botão de carrinho ── */
+.cart-btn{position:relative;width:36px;height:36px;border-radius:50%;background:rgba(201,161,92,.1);border:1px solid rgba(201,161,92,.24);color:var(--g);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:auto;transition:background .2s}
+.cart-btn:active{background:rgba(201,161,92,.24)}
+.cart-count{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--g);color:var(--dark);font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--dark);font-family:'Jost',sans-serif}
+.fab-cart{background:linear-gradient(135deg,#EFE9DC,#D9CDB4);box-shadow:0 4px 16px rgba(201,161,92,.34);color:var(--dark);font-size:22px;animation:bi .6s .2s cubic-bezier(.34,1.56,.64,1) both}
+.fab-cart::before{border-color:var(--g)}
+.fab-cart .cart-count{border-color:var(--dark);top:-2px;right:-2px}
+
+/* ── Loja: barra de resumo e grade ── */
+.loja-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 2px}
+.loja-count{font-size:11.5px;color:var(--g);font-weight:600;letter-spacing:.04em}
+.loja-frete{font-size:10.5px;color:var(--dim)}
+.loja-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;padding-top:16px}
+@media(min-width:560px){.loja-grid{grid-template-columns:repeat(3,1fr)}}
+
+.pcard{background:var(--card);border:1px solid rgba(201,161,92,.12);border-radius:14px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 2px 12px var(--shadow);transition:transform .26s cubic-bezier(.34,1.56,.64,1),box-shadow .26s,border-color .26s}
+.pcard:active{transform:scale(.97)}
+@media(hover:hover){.pcard:hover{transform:translateY(-3px);border-color:rgba(201,161,92,.36);box-shadow:0 8px 26px rgba(201,161,92,.14)}}
+.pcard.vendida{opacity:.5}
+.pcard-img{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:var(--card2)}
+.pcard-img img{width:100%;height:100%;object-fit:cover;display:block}
+.pcard-tipo{position:absolute;top:8px;left:8px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:rgba(12,10,8,.72);border:1px solid rgba(201,161,92,.3);color:var(--g);backdrop-filter:blur(6px)}
+.pcard-sold{position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:rgba(120,20,20,.85);border:1px solid rgba(255,120,120,.4);color:#ffd9d9}
+.pcard-body{padding:11px 11px 12px;display:flex;flex-direction:column;flex:1}
+.pcard-ttl{font-family:'Playfair Display',serif;font-size:13.5px;font-weight:600;color:var(--white);line-height:1.25}
+.pcard-cod{font-size:9.5px;color:var(--dim);margin-top:3px;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard-preco{font-size:15px;font-weight:600;color:var(--g);margin-top:7px;font-family:'Playfair Display',serif}
+.pcard-parc{font-size:10px;color:var(--dim);margin-top:1px}
+.pcard-btn{width:100%;margin-top:10px;padding:8px;border:none;border-radius:9px;background:linear-gradient(135deg,var(--g),var(--g2));color:var(--dark);font-family:'Jost',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:transform .18s}
+.pcard-btn:active{transform:scale(.94)}
+.pcard-btn.in{background:transparent;border:1.5px solid rgba(201,161,92,.45);color:var(--g)}
+.pcard-btn.off{background:rgba(255,255,255,.05);color:var(--dim);cursor:not-allowed}
+
+/* Passo a passo da compra (rodapé da loja) */
+.loja-como{margin-top:26px;padding-top:18px;border-top:1px solid rgba(201,161,92,.12)}
+
+/* ── Ficha da obra ── */
+.ob-img{position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid rgba(201,161,92,.2);background:var(--card2);margin-bottom:14px}
+.ob-img img{width:100%;display:block}
+.ob-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.ob-ttl{font-family:'Playfair Display',serif;font-size:25px;font-weight:600;color:var(--white);line-height:1.15}
+.ob-cod{font-size:11px;color:var(--dim);letter-spacing:.06em;margin-top:4px;margin-bottom:16px}
+.ob-specs{display:flex;flex-direction:column;gap:1px;border:1px solid rgba(201,161,92,.12);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.ob-spec{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:11px 13px;background:rgba(201,161,92,.03)}
+.ob-spec span{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;flex-shrink:0}
+.ob-spec strong{font-size:12px;color:var(--text);font-weight:500;text-align:right}
+.ob-preco-box{background:rgba(201,161,92,.06);border:1px solid rgba(201,161,92,.22);border-radius:14px;padding:16px;margin-bottom:16px}
+.ob-preco{font-family:'Playfair Display',serif;font-size:32px;font-weight:600;color:var(--g);line-height:1}
+.ob-parc{font-size:12px;color:var(--dim);margin-top:6px}
+.ob-frete{font-size:12px;color:#4ade80;font-weight:600;margin-top:8px}
+
+/* Botões secundários da ficha */
+.cta-alt{display:block;width:100%;padding:13px;margin-top:9px;background:transparent;border:1.5px solid rgba(201,161,92,.32);border-radius:13px;color:var(--g);font-family:'Jost',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;transition:background .2s}
+.cta-alt:active{background:rgba(201,161,92,.12)}
+.cta-wa{display:block;width:100%;padding:12px;margin-top:9px;background:rgba(37,211,102,.07);border:1.5px solid rgba(37,211,102,.25);border-radius:12px;color:#4ade80;font-size:12.5px;font-weight:600;text-align:center;text-decoration:none}
+
+/* ── Carrinho ── */
+.cart-itens{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
+.cart-item{display:flex;gap:11px;align-items:center;background:var(--card);border:1px solid rgba(201,161,92,.1);border-radius:12px;padding:9px}
+.cart-thumb{width:62px;height:62px;border-radius:9px;overflow:hidden;flex-shrink:0;background:var(--card2)}
+.cart-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.cart-info{flex:1;min-width:0}
+.cart-nm{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--white)}
+.cart-cod{font-size:10px;color:var(--dim);margin-top:2px}
+.cart-pr{font-size:14px;font-weight:600;color:var(--g);margin-top:4px}
+.cart-del{width:28px;height:28px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.04);border:1px solid rgba(201,161,92,.14);color:var(--dim);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cart-del:active{background:rgba(255,80,80,.16);color:#ff9a9a}
+
+.cart-resumo{background:rgba(201,161,92,.05);border:1px solid rgba(201,161,92,.18);border-radius:13px;padding:14px 15px;margin-bottom:16px}
+.cart-linha{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--dim);padding:5px 0}
+.cart-gratis{color:#4ade80;font-weight:700}
+.cart-total{border-top:1px solid rgba(201,161,92,.16);margin-top:6px;padding-top:11px;font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:var(--g)}
+.cart-total span:first-child{font-size:13px;color:var(--text);font-family:'Jost',sans-serif}
+.cart-parc{font-size:11px;color:var(--dim);text-align:right;margin-top:2px}
+
+.cart-form{margin-bottom:14px}
+.cart-form-t{font-size:10px;color:var(--g);text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:9px}
+.cart-inp{width:100%;padding:12px 13px;margin-bottom:8px;background:var(--card);border:1px solid rgba(201,161,92,.16);border-radius:11px;color:var(--text);font-family:'Jost',sans-serif;font-size:13.5px;outline:none;transition:border-color .2s}
+.cart-inp::placeholder{color:var(--dim)}
+.cart-inp:focus{border-color:rgba(201,161,92,.5)}
+.cart-erro{font-size:11.5px;color:#ff9a9a;min-height:15px;margin-top:2px}
+.cart-selo{font-size:10.5px;color:var(--dim);text-align:center;margin-top:9px;letter-spacing:.03em}
+
+.cart-vazio{text-align:center;padding:44px 10px 20px}
+.cart-vazio-ico{font-size:44px;opacity:.5;margin-bottom:12px}
+.cart-vazio-t{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:var(--white)}
+.cart-vazio-s{font-size:12.5px;color:var(--dim);margin:6px 0 22px}
+
+/* ── Toast ── */
+#toast{position:fixed;left:50%;bottom:calc(var(--safe-b) + 22px);transform:translate(-50%,26px);z-index:9998;display:flex;align-items:center;gap:9px;max-width:calc(100vw - 32px);padding:11px 17px;border-radius:26px;background:rgba(22,17,9,.96);border:1px solid rgba(201,161,92,.35);color:var(--text);font-size:12.5px;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.6);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .28s,transform .28s cubic-bezier(.34,1.56,.64,1)}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#toast span{font-size:15px}

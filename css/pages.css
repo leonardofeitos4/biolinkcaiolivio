@@ -47,6 +47,15 @@
 .sobre-txt{font-size:13px;color:var(--dim);line-height:1.75}
 .sobre-txt strong{color:var(--text)}
 
+/* Currículo — linha do tempo */
+.tl{position:relative;padding-left:16px}
+.tl::before{content:'';position:absolute;left:3px;top:6px;bottom:6px;width:1px;background:linear-gradient(180deg,rgba(201,161,92,.5),rgba(201,161,92,.08))}
+.tl-item{position:relative;display:flex;gap:12px;align-items:flex-start;padding:9px 0}
+.tl-item::before{content:'';position:absolute;left:-16px;top:15px;width:7px;height:7px;border-radius:50%;background:var(--g);box-shadow:0 0 0 3px rgba(201,161,92,.15)}
+.tl-year{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--g);min-width:42px;flex-shrink:0;line-height:1.5}
+.tl-txt{font-size:12.5px;color:var(--dim);line-height:1.55}
+.tl-txt strong{color:var(--text);font-weight:600}
+
 /* Colecionadores */
 .cli-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px}
 .cs-box{background:rgba(201,161,92,.05);border:1px solid rgba(201,161,92,.16);border-radius:12px;padding:13px 8px;text-align:center}
