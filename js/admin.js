@@ -49,13 +49,6 @@ function showPanel() {
   $('panel-view').hidden = false;
 }
 
-function forcePanelReload() {
-  const url = new URL(location.href);
-  url.searchParams.set('painel', '1');
-  url.searchParams.set('v', Date.now().toString());
-  location.replace(url.toString());
-}
-
 function statusLabel(status) {
   const labels = {
     approved: 'Aprovado',
@@ -219,8 +212,8 @@ $('login-form').addEventListener('submit', async event => {
     if (login.token) sessionStorage.setItem(TOKEN_KEY, login.token);
     $('admin-password').value = '';
     showPanel();
-    $('notice').textContent = 'Login aceito. Abrindo painel...';
-    forcePanelReload();
+    $('notice').textContent = 'Login aceito. Carregando painel...';
+    await loadPanel({ afterLogin: true });
   } catch (err) {
     $('login-error').textContent = err.message;
   }
@@ -247,9 +240,4 @@ if (params.get('mp') === 'connected') {
   history.replaceState({}, '', '/admin.html');
 }
 
-if (params.get('painel') === '1') {
-  showPanel();
-  $('notice').textContent = 'Sessao encontrada. Carregando compras...';
-}
-
-loadPanel({ afterLogin: params.get('painel') === '1' });
+loadPanel();

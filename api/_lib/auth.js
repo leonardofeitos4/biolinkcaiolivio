@@ -71,6 +71,11 @@ function requireAdmin(req, res) {
   const bearer = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
   const session = verifySession(parseCookies(req.headers.cookie)[COOKIE]) || verifySession(bearer);
   if (session) return session;
+  console.warn('[admin/auth] nao autorizado', {
+    path: req.url,
+    hasCookie: Boolean(req.headers.cookie),
+    hasBearer: Boolean(bearer),
+  });
   json(res, 401, { erro: 'Nao autorizado' });
   return null;
 }
