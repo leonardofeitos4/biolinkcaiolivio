@@ -116,7 +116,7 @@ function renderLoja() {
         <div class="pcard-ttl">${o.titulo}</div>
         <div class="pcard-cod">${o.cod} · ${o.tecnica}</div>
         <div class="pcard-preco">${brl(o.preco)}</div>
-        <div class="pcard-parc">${PAGAMENTO.parcelas}x de ${parcelaDe(o.preco)}</div>
+        <div class="pcard-parc">Atendimento pelo WhatsApp</div>
         ${indisponivel
           ? `<button class="pcard-btn off" disabled>${o.reservada ? 'Obra reservada' : 'Obra vendida'}</button>`
           : `<button class="pcard-btn ${noCarrinho ? 'in' : ''}"
@@ -168,7 +168,7 @@ function abrirObra(cod) {
 
     <div class="ob-preco-box">
       <div class="ob-preco">${brl(o.preco)}</div>
-      <div class="ob-parc">em até ${PAGAMENTO.parcelas}x de ${parcelaDe(o.preco)} no cartão</div>
+      <div class="ob-parc">Pagamento combinado direto com a curadoria</div>
       <div class="ob-frete">✓ ${PAGAMENTO.frete.texto}</div>
     </div>
 
@@ -260,7 +260,7 @@ function renderCarrinho() {
       <div class="cart-linha"><span>Subtotal (${itens.length} ${itens.length > 1 ? 'obras' : 'obra'})</span><span>${brl(total)}</span></div>
       <div class="cart-linha"><span>Frete</span><span class="cart-gratis">Grátis</span></div>
       <div class="cart-linha cart-total"><span>Total</span><span>${brl(total)}</span></div>
-      <div class="cart-parc">em até ${PAGAMENTO.parcelas}x de ${parcelaDe(total)} no cartão</div>
+      <div class="cart-parc">Pagamento combinado direto com a curadoria</div>
     </div>
 
     <div class="cart-form">
@@ -281,8 +281,8 @@ function renderCarrinho() {
       <div class="cart-erro" id="cart-erro"></div>
     </div>
 
-    <button class="cta-btn" id="btn-checkout" onclick="checkout()">🔒 Finalizar compra · ${brl(total)}</button>
-    <div class="cart-selo">Pagamento processado pelo Mercado Pago · Pix, cartão ou boleto</div>
+    <button class="cta-btn" id="btn-checkout" onclick="checkout()">Enviar pedido no WhatsApp · ${brl(total)}</button>
+    <div class="cart-selo">Atendimento direto pelo WhatsApp · frete grátis para todo o Brasil</div>
     <button class="cta-alt" onclick="irParaLoja()">Continuar escolhendo obras</button>
   `;
 }
@@ -370,13 +370,13 @@ function checkout() {
 
   const btn = document.getElementById('btn-checkout');
   finalizarCompra(itens, c, st => {
-    if (st === 'carregando') { btn.disabled = true; btn.textContent = 'Abrindo pagamento…'; }
-    if (st === 'redirecionando') btn.textContent = 'Redirecionando…';
-    if (st === 'wa') { btn.textContent = 'Enviando pedido no WhatsApp…'; setTimeout(() => renderCarrinho(), 1500); }
+    if (st === 'carregando') { btn.disabled = true; btn.textContent = 'Preparando WhatsApp…'; }
+    if (st === 'redirecionando') btn.textContent = 'Abrindo WhatsApp…';
+    if (st === 'wa') { btn.textContent = 'Pedido aberto no WhatsApp'; setTimeout(() => renderCarrinho(), 1500); }
     if (st === 'erro') {
       btn.disabled = false;
       btn.textContent = 'Tentar novamente';
-      erro.textContent = 'Não foi possível abrir o pagamento agora. Abrimos o WhatsApp da curadoria para você concluir.';
+      erro.textContent = 'Não foi possível abrir o WhatsApp agora. Tente novamente ou fale com a curadoria pelo link principal.';
     }
   });
 }

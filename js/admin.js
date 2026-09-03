@@ -12,10 +12,6 @@ const authState = {
 const $ = id => document.getElementById(id);
 const TOKEN_KEY = 'cl_admin_token';
 
-function debugLog(message, details = {}) {
-  console.info(message, details);
-}
-
 function brl(v) {
   return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
@@ -31,31 +27,16 @@ function esc(v) {
 
 async function api(url, options = {}) {
   const token = authState.token || getStoredToken();
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...(options.headers || {}),
-  };
-
-  debugLog('[admin/api] request', {
-    method: options.method || 'GET',
-    url,
-    authenticated: authState.authenticated,
-    hasBearer: Boolean(token),
-  });
-
   const res = await fetch(url, {
     credentials: 'include',
     ...options,
-    headers,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {}),
+    },
   });
   const data = await res.json().catch(() => ({}));
-  debugLog('[admin/api] response', {
-    method: options.method || 'GET',
-    url,
-    status: res.status,
-    ok: res.ok,
-  });
   if (!res.ok) {
     const err = new Error(data.erro || 'Falha na requisicao');
     err.status = res.status;
@@ -91,7 +72,8 @@ function clearToken() {
 }
 
 function showDebug(message) {
-  const target = $('panel-view').hidden ? $('login-error') : $('notice');
+  const panel = $('panel-view');
+  const target = panel && !panel.hidden ? $('notice') : $('login-error');
   if (target) target.textContent = message;
 }
 
@@ -130,18 +112,19 @@ function renderMetrics() {
     <div class="metric"><strong>${aprovadas}</strong><span>Aprovadas</span></div>
     <div class="metric"><strong>${brl(total)}</strong><span>Receita aprovada</span></div>
   `;
-  $('notice').textContent = pendentes ? `${pendentes} compra(s) aguardando pagamento ou confirmacao.` : '';
+  $('notice').textContent = pendentes ? `${pendentes} compra(s) aguardando confirmacao.` : '';
 }
 
 function renderOrders() {
   if (!state.orders.length) {
+    state.selectedId = null;
     $('orders-list').innerHTML = '<div class="empty-detail">Nenhuma compra registrada ainda.</div>';
-    $('order-detail').innerHTML = '<div class="empty-detail">Os pedidos criados pelo checkout aparecem aqui.</div>';
+    $('order-detail').innerHTML = '<div class="empty-detail">Os pedidos antigos do checkout aparecem aqui.</div>';
     renderMetrics();
     return;
   }
 
-  if (!state.selectedId) state.selectedId = state.orders[0].id;
+  if (!state.orders.some(order => order.id === state.selectedId)) state.selectedId = state.orders[0].id;
   $('orders-list').innerHTML = state.orders.map(order => {
     const itemTitle = order.items?.[0]?.title || 'Compra sem obra';
     const extra = order.items?.length > 1 ? ` +${order.items.length - 1}` : '';
@@ -149,8 +132,8 @@ function renderOrders() {
       <button class="order-card ${order.id === state.selectedId ? 'active' : ''}" type="button" data-order="${esc(order.id)}">
         <div>
           <div class="order-title">${esc(itemTitle)}${extra}</div>
-          <div class="order-meta">${esc(order.buyer?.name || '-')} · ${dataBR(order.created_at)}</div>
-          <div class="order-meta">${brl(order.total)} · Pedido ${esc(order.id.slice(0, 8))}</div>
+          <div class="order-meta">${esc(order.buyer?.name || '-')} - ${dataBR(order.created_at)}</div>
+          <div class="order-meta">${brl(order.total)} - Pedido ${esc(order.id.slice(0, 8))}</div>
         </div>
         <span class="status ${esc(order.status)}">${statusLabel(order.status)}</span>
       </button>
@@ -200,7 +183,7 @@ function renderDetail() {
       ${(order.items || []).map(item => `
         <div class="item-row">
           <img src="${esc(item.image || '')}" alt="${esc(item.title)}">
-          <div><strong>${esc(item.title)}</strong><span>${esc(item.code)} · ${brl(item.price)}</span></div>
+          <div><strong>${esc(item.title)}</strong><span>${esc(item.code)} - ${brl(item.price)}</span></div>
         </div>
       `).join('')}
     </section>
@@ -213,81 +196,43 @@ async function loadPanel(options = {}) {
   const hasSavedToken = Boolean(authState.token || getStoredToken());
 
   try {
-  if (afterLogin || hasSavedToken) {
-    authState.authenticated = true;
-    showPanel();
-    $('notice').textContent = afterLogin ? 'Login aceito. Carregando painel...' : 'Carregando painel...';
-  }
-
-  debugLog('[admin/panel] loadPanel inicio', { requestId, afterLogin, hasSavedToken });
-
-  const [ordersResult, mpResult] = await Promise.all([
-    api('/api/admin/orders').then(
-      data => ({ ok: true, data }),
-      err => ({ ok: false, err })
-    ),
-    api('/api/admin/mp/status').then(
-      data => ({ ok: true, data }),
-      err => ({ ok: false, err })
-    ),
-  ]);
-
-  if (requestId !== authState.loadingId) {
-    debugLog('[admin/panel] resposta antiga ignorada', { requestId, active: authState.loadingId });
-    return;
-  }
-
-  debugLog('[admin/panel] respostas recebidas', {
-    requestId,
-    ordersOk: ordersResult.ok,
-    ordersStatus: ordersResult.err?.status || 200,
-    mpOk: mpResult.ok,
-    mpStatus: mpResult.err?.status || 200,
-  });
-
-  if (!afterLogin && !authState.authenticated && ordersResult.err?.status === 401 && mpResult.err?.status === 401) {
-    showLogin({ force: true });
-    return;
-  }
-
-  if (ordersResult.err?.status === 401 && mpResult.err?.status === 401 && !authState.token && !getStoredToken()) {
-    authState.authenticated = false;
-    showLogin({ force: true });
-    return;
-  }
-
-  showPanel();
-
-  const notices = [];
-  if (ordersResult.ok) {
-    state.orders = ordersResult.data.orders || [];
-  } else {
-    state.orders = [];
-    if (ordersResult.err.status === 401) {
-      notices.push('Login aceito, mas a sessao nao voltou no cookie. Confira HTTPS/proxy/cookie.');
-    } else {
-      notices.push(`Compras: ${ordersResult.err.message}`);
+    if (afterLogin || hasSavedToken) {
+      authState.authenticated = true;
+      showPanel();
+      $('notice').textContent = afterLogin ? 'Login aceito. Carregando painel...' : 'Carregando painel...';
     }
-  }
-  renderOrders();
 
-  if (mpResult.ok) {
-    const mp = mpResult.data;
-    $('mp-status').textContent = mp.connected
-      ? `Conectado via ${mp.source === 'oauth' ? 'OAuth' : 'token do servidor'}${mp.user_id ? ` · ${mp.user_id}` : ''}`
-      : 'Conta ainda nao conectada.';
-    $('mp-connect-btn').textContent = mp.connected ? 'Reconectar' : 'Conectar';
-  } else {
-    $('mp-status').textContent = mpResult.err.status === 401
+    const ordersResult = await api('/api/admin/orders').then(
+      data => ({ ok: true, data }),
+      err => ({ ok: false, err })
+    );
+
+    if (requestId !== authState.loadingId) return;
+
+    if (!afterLogin && !authState.authenticated && ordersResult.err?.status === 401) {
+      showLogin({ force: true });
+      return;
+    }
+
+    if (ordersResult.err?.status === 401 && !authState.token && !getStoredToken()) {
+      authState.authenticated = false;
+      showLogin({ force: true });
+      return;
+    }
+
+    showPanel();
+    if (ordersResult.ok) {
+      state.orders = ordersResult.data.orders || [];
+      renderOrders();
+      return;
+    }
+
+    state.orders = [];
+    renderOrders();
+    $('notice').textContent = ordersResult.err.status === 401
       ? 'Sessao admin nao autenticada.'
-      : mpResult.err.message;
-    if (mpResult.err.status !== 401) notices.push(`Mercado Pago: ${mpResult.err.message}`);
-  }
-
-  $('notice').textContent = notices.join(' ');
-  debugLog('[admin/panel] painel renderizado', { requestId, orders: state.orders.length });
+      : `Compras: ${ordersResult.err.message}`;
   } catch (err) {
-    console.error('[admin/panel] erro ao renderizar', err);
     if (requestId === authState.loadingId) {
       authState.authenticated = true;
       showPanel();
@@ -302,20 +247,13 @@ $('login-form').addEventListener('submit', async event => {
   authState.authenticated = true;
   $('login-error').textContent = '';
   try {
-    console.info('[admin/login] enviando senha');
     const login = await api('/api/admin/login', {
       method: 'POST',
       body: JSON.stringify({ password: $('admin-password').value }),
     });
 
-    if (loginRequestId !== authState.loadingId) {
-      console.info('[admin/login] resposta antiga ignorada', { loginRequestId, active: authState.loadingId });
-      return;
-    }
-
-    if (!login.token) {
-      throw new Error('Login aceito, mas token nao retornou');
-    }
+    if (loginRequestId !== authState.loadingId) return;
+    if (!login.token) throw new Error('Login aceito, mas token nao retornou');
 
     storeToken(login.token);
     $('admin-password').value = '';
@@ -336,18 +274,8 @@ $('logout-btn').addEventListener('click', async () => {
   showLogin({ force: true });
 });
 
-$('mp-connect-btn').addEventListener('click', async () => {
-  try {
-    $('mp-status').textContent = 'Abrindo autorizacao...';
-    const data = await api('/api/admin/mp/connect');
-    location.href = data.url;
-  } catch (err) {
-    $('mp-status').textContent = err.message;
-  }
-});
-
 const params = new URLSearchParams(location.search);
-if (params.get('mp') === 'connected') {
+if (params.has('mp')) {
   history.replaceState({}, '', '/admin.html');
 }
 
